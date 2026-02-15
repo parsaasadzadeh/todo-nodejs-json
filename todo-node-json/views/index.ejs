@@ -1,0 +1,124 @@
+<%- include('./includes/head.ejs') %>
+
+    <body
+        class="bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 animate-gradient min-h-screen flex items-center justify-center p-4 selection:bg-pink-500 selection:text-white">
+
+        <div class="relative w-full max-w-lg">
+
+            <div
+                class="absolute -top-10 -left-10 w-40 h-40 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob">
+            </div>
+            <div
+                class="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000">
+            </div>
+
+            <div
+                class="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden relative z-10">
+
+                <div class="p-8 pb-4 border-b border-white/10">
+                    <h1
+                        class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-300 mb-1">
+                        Today's Missions
+                    </h1>
+                    <p class="text-slate-400 text-sm font-light">Stay focused on your goals.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 px-8 py-6">
+                    <div
+                        class="bg-emerald-500/20 border border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between group hover:bg-emerald-500/30 transition-all cursor-default">
+                        <div>
+                            <span class="block text-2xl font-bold text-emerald-300">
+                                <%= completedTodos %>
+                            </span>
+                            <span class="text-xs text-emerald-100/70 font-light">Completed</span>
+                        </div>
+                        <div
+                            class="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300 group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-blue-500/20 border border-blue-500/30 rounded-2xl p-4 flex items-center justify-between group hover:bg-blue-500/30 transition-all cursor-default">
+                        <div>
+                            <span class="block text-2xl font-bold text-blue-300">
+                                <%= totalTasks %>
+                            </span>
+                            <span class="text-xs text-blue-100/70 font-light">Total Tasks</span>
+                        </div>
+                        <div
+                            class="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8 pt-2 bg-black/20">
+                    <%- include('./includes/todoForm.ejs') %>
+                        <% if (todos && todos.length> 0) { %>
+                            <div class="mt-6 space-y-3">
+                                <% todos.forEach(function(todo) { %>
+                                    <div
+                                        class="group flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-pink-500/30 hover:bg-white/10 transition-all">
+
+                                        <div class="flex items-center">
+                                            <div
+                                                class="w-2 h-2 rounded-full mr-3 <%= todo.completed ? 'bg-emerald-500' : 'bg-slate-500' %>">
+                                            </div>
+
+                                            <span
+                                                class="text-sm transition-all <%= todo.completed ? 'text-slate-500 line-through italic' : 'text-white' %>">
+                                                <%= todo.text %>
+                                            </span>
+                                        </div>
+
+                                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <% if (!todo.completed) { %>
+                                                <form action="/complete/<%= todo.id %>" method="POST" class="m-0 p-0">
+                                                    <button type="submit"
+                                                        class="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                                <% } %>
+
+                                                    <form action="/delete/<%= todo.id %>" method="POST" class="m-0 p-0">
+                                                        <button type="submit"
+                                                            class="p-1.5 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white transition-all shadow-lg shadow-rose-500/10">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                            </div>
+                            <% } else { %>
+                                <div class="text-center py-10 opacity-40">
+                                    <p class="text-slate-400 text-sm italic font-light">Your mission list is empty...
+                                    </p>
+                                </div>
+                                <% } %>
+
+
+                </div>
+            </div>
+        </div>
+
+        <%- include('./includes/footer.ejs') %>
